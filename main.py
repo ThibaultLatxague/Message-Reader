@@ -29,18 +29,12 @@ async def on_message(message):
     channel = bot.get_channel(PRIVATE_CHANNEL_ID)
     if message.attachments and channel:  # Vérifie si le message contient des fichiers attachés
       for attachment in message.attachments:
-        if attachment.content_type.startswith(
-            "image/"):  # Vérifie si c'est une image
-          await channel.send(f"Message de {message.author} : {message.content}"
-                             )
-          await attachment.save(attachment.filename
-                                )  # Sauvegarde l'image localement
-          await message.channel.send(
-              f"Image reçue : {attachment.filename} sauvegardée !")
-          await channel.send(f"Image relayée depuis {message.author} :",
-                             file=await attachment.to_file())
+        if attachment.content_type.startswith("image/"):  # Vérifie si c'est une image
+          await channel.send(f"Message de {message.author} : {message.content}")
+          await attachment.save(attachment.filename)  # Sauvegarde l'image localement
+          await message.channel.send(f"Image reçue : {attachment.filename} sauvegardée !")
+          await channel.send(f"Image relayée depuis {message.author} :", file=await attachment.to_file())
           await message.delete()  # Supprime le message original
-
     elif channel:
       await channel.send(f"Message de {message.author} : {message.content}")
       await message.delete()
