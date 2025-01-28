@@ -1,5 +1,5 @@
 # Application related files
-config.py
+config/config_app.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
