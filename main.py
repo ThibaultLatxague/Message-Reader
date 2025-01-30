@@ -41,6 +41,12 @@ async def ajouter_reaction(message: discord.Message, channel: discord.TextChanne
 	await message.add_reaction(emoji)
 	await channel.send(f"Réaction ajoutée à un message de {message.author} !")
 
+async def supprimer_message(message: discord.Message, channel: discord.TextChannel):
+	"""Commande pour supprimer un message."""
+	await message.delete()
+	message.content = message.content.replace('_del_', '')
+	await envoyer_mp(USER_ID, f"Message supprimé avec succès ! \nMessage : {message.content}", channel)
+
 @bot.event
 async def on_message(message):
 	if message.guild and message.author != bot.user:
@@ -52,6 +58,8 @@ async def on_message(message):
 				await channel.send(f"Commande reçue : {message.content}")
 				await ajouter_reaction(message, channel)
 				await envoyer_mp(USER_ID, "Message (avec bonjour) sauvegardé avec succès !", channel)
+			if('_del_' in message.content.lower()):
+				await supprimer_message(message, channel)
 			else :
 				await channel.send(f"Commande reçue : {message.content}")
 
