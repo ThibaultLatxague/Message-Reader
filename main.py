@@ -22,8 +22,7 @@ async def envoyer_mp(user_id: int, message: str, channel):
 	try:
 		user = await bot.fetch_user(user_id)  # Récupère l'utilisateur par son ID
 		await user.send(message)  # Envoie un MP
-		await channel.send(
-		f"Message envoyé à {user.name}#{user.discriminator} avec succès !")
+		await channel.send(f"Message envoyé à {user.name} avec succès !")
 	except Exception as e:
 		await channel.send(f"Erreur : {e}")
 
@@ -39,11 +38,15 @@ async def on_message(message):
 					await attachment.save(attachment.filename)  # Sauvegarde l'image localement
 					await message.channel.send(f"Image de {message.author} : {attachment.filename} sauvegardée !")
 					await channel.send(f"Image relayée depuis {message.author} :", file=await attachment.to_file())
-					await message.delete()  # Supprime le message original
+					# await message.delete()  # Supprime le message original
 					await envoyer_mp(USER_ID, "Message sauvegardé avec succès !", channel)
 		elif channel:
-			await channel.send(f"Message de {message.author} : {message.content}")
-			await message.delete()
+			if "bonjour" in message.content:
+				emoji = "👍"  # Réaction avec un pouce levé
+				await message.add_reaction(emoji)
+			
+			await channel.send(f"{message.author} : {message.content}")
+			# await message.delete()
 			await envoyer_mp(USER_ID, "Message sauvegardé avec succès !", channel)
 
 
